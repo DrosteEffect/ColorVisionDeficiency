@@ -1,4 +1,4 @@
-function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev)
+function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev,gamma)
 % Simulate color vision deficiency (CVD: protanomaly, deuteranomaly, tritanomaly)
 %
 % (c) 2026 Stephen Cobeldick
@@ -13,6 +13,7 @@ function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev)
 %
 %   cvd = cvdsim(rgb,typ)
 %   cvd = cvdsim(rgb,typ,sev)
+%   cvd = cvdsim(rgb,typ,sev,gamma)
 %   [cvd,raw] = cvdsim(...)
 %
 %% Algorithm %%
@@ -60,9 +61,17 @@ function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev)
 %         matrices approximate tritanomaly only, via a spectral-shift
 %         method, which is informally extended up to severity 1.
 %   sev = NumericScalar, the severity of the deficiency, with value range:
-%         0 = normal color vision (<gam> is the identity matrix).
+%         0   = normal color vision (<gam> is the identity matrix).
 %         1** = complete dichromacy (protanopia/deuteranopia)
 %               or the most severe tabulated case of tritanomaly.
+%   gamma = LogicalScalar controlling whether the simulation matrices
+%         are applied to linearized RGB values, where:
+%         true** = apply inverse sRGB gamma correction, simulate in
+%                  linear RGB, then reapply sRGB gamma correction.
+%                  This is the theoretically correct interpretation.
+%         false  = apply the simulation matrices directly to sRGB values
+%                  values without gamma correction. This more closely
+%                  reproduces the images embedded in Machado (2009) PDF.
 %
 %% Output Arguments %%
 %
@@ -135,6 +144,15 @@ else
 	sev = 10*double(sev);
 end
 %
+if nargin<4
+	gamma = true;
+else
+	assert(isequal(gamma,0)||isequal(gamma,1),...
+		'SC:cvdsim:gamma:NotScalarLogical',...
+		'Fourth input <sev> must be true/1 or false/0.')
+	gamma = logical(gamma);
+end
+%
 %% Interpolate the Simulation Matrix %%
 %
 id0 = min(floor(sev),9);
@@ -143,9 +161,19 @@ mat = (1-adj).*arr(:,:,id0+1) + adj.*arr(:,:,id0+2);
 %
 %% Apply the Transformation %%
 %
-lin = reshape(sGammaInv(rgb),[],3);
+if gamma
+	lin = reshape(sGammaInv(rgb),[],3);
+else
+	lin = reshape(rgb,[],3);
+end
+%
 sim = lin*mat.';
-raw = reshape(sGammaCor(sim),isz);
+%
+if gamma
+	raw = reshape(sGammaCor(sim),isz);
+else
+	raw = reshape(sim,isz);
+end
 %
 if mxv>1
 	cvd = cast(mxv*raw,icl);
