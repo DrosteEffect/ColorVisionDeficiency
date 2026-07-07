@@ -78,26 +78,17 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 %
 %% Examples %%
 %
-%%% Recolor an image for protanopes using default options %%%
+%%% Recolor an image %%%
 %
-% >> rgb = imread("peppers.png");
-% >> imshow(milic2015(rgb,'protan'))
-%
-%%% Recolor an image using four chromatic segments and a 4 degree interval %%%
-%
-% >> imshow(milic2015(rgb,'deutan', 'nseg',4, 'ang',4))
+% >> I = imread("peppers.png");
+% >> imshow(milic2015(I,'protan'))
+% >> imshow(milic2015(I,'deutan', 'nseg',4, 'ang',4))
 %
 %%% Use a scalar structure of options %%%
 %
 % >> opt.nseg = 4;
 % >> opt.ang = 4;
-% >> imshow(milic2015(rgb,'deutan',opt))
-%
-%%% Inspect original and remapped segment centers %%%
-%
-% >> [rec,raw,ctr0,ctr1,idx] = milic2015(rgb,'p');
-% >> ctr0
-% >> ctr1
+% >> imshow(milic2015(I,'p',opt))
 %
 %% Notes %%
 %

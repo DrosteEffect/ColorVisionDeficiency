@@ -54,15 +54,11 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %
 %% Examples %%
 %
-%%% Recolor an image for deuteranopes %%%
+%%% Recolor an image %%%
 %
-%   >> rgb = imread("peppers.png");
-%   >> imshow(machado2010(rgb,'deutan'))
-%
-%%% Recolor an image for protanopes using exaggerated contrast %%%
-%
-%   >> rgb = imread("peppers.png");
-%   >> imshow(machado2010(rgb,'protan',true))
+%   >> I = imread("peppers.png");
+%   >> imshow(machado2010(I,'deutan'))
+%   >> imshow(machado2010(I,'protan',true)) % exagerated
 %
 %%% Preserve temporal coherence across frames %%%
 %

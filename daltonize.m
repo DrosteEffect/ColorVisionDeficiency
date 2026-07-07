@@ -54,8 +54,8 @@ function [dal,raw,cvd] = daltonize(rgb,typ,sev)
 %
 %%% Daltonize an image for moderate deuteranopy %%%
 %
-%   >> rgb = imread("peppers.png");
-%   >> imshow(daltonize(rgb, 'deutan',0.6))
+%   >> I = imread("peppers.png");
+%   >> imshow(daltonize(I, 'deutan',0.6))
 %
 %%% View Parula enhanced for all three CVD types %%%
 %
