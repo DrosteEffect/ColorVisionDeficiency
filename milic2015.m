@@ -1,5 +1,5 @@
 function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
-% Content-dependent naturalness-preserving daltonization (Milić et al, 2015)
+% Naturalness-preserving image color enhancement for CVD/dichromats (Milić et al, 2015)
 %
 % (c) 2026 Stephen Cobeldick
 %
@@ -139,7 +139,7 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 % * MATLAB R2009b or later.
 % * No toolboxes are required.
 %
-% See also CVDSIM DALTONIZE MACHADO2010
+% See also CVDSIM DALTONIZER MACHADO2010
 % COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
 % SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
 

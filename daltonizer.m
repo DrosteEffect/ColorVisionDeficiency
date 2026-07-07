@@ -1,19 +1,20 @@
-function [dal,raw,cvd] = daltonize(rgb,typ,sev)
-% Daltonize/recolor an image to improve contrast for CVD observers (protanomaly, deuteranomaly, tritanomaly)
+function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
+% Image color contrast enhancement for CVD/dichromats (Fidaner et al, 2005)
 %
 % (c) 2026 Stephen Cobeldick
 %
-% Adjusts the colors of an image so that an observer with color vision
-% deficiency (CVD) can better distinguish details that would otherwise be
-% lost. This is the counterpart of CVDSIM: CVDSIM shows a normal-sighted
-% viewer what a CVD observer sees; DALTONIZE instead modifies a (normal)
+% Recolors an RGB image/colormap to improve color contrast for dichromats
+% (protanopes, deuteranopes, and tritanopes), using the point-based
+% content-independent method of Fidaner, Lin & Ozguven (2005).
+% This is the counterpart of CVDSIM: CVDSIM shows a normal-sighted
+% viewer what a CVD observer sees; DALTONIZER instead modifies a (normal)
 % image so that a CVD observer sees more of the original information.
 %
 %%% Syntax %%%
 %
-%   dal = daltonize(rgb,typ)
-%   dal = daltonize(rgb,typ,sev)
-%   [dal,raw,cvd] = daltonize(...)
+%   dal = daltonizer(rgb,typ)
+%   dal = daltonizer(rgb,typ,sev)
+%   [dal,raw,cvd] = daltonizer(...)
 %
 %% Algorithm %%
 %
@@ -49,18 +50,18 @@ function [dal,raw,cvd] = daltonize(rgb,typ,sev)
 %
 %%% Enhance a single RGB triple for protanopia %%%
 %
-%   >> daltonize([1,0,0], 'protan')
+%   >> daltonizer([1,0,0], 'protan')
 %   ans = [1.0000  0.7213  0.7961]
 %
 %%% Daltonize an image for moderate deuteranopy %%%
 %
 %   >> I = imread("peppers.png");
-%   >> imshow(daltonize(I, 'deutan',0.6))
+%   >> imshow(daltonizer(I, 'deutan',0.6))
 %
 %%% View Parula enhanced for all three CVD types %%%
 %
 %   >> I = permute(parula(17),[3,1,2]);
-%   >> imshow([I;daltonize(I,'p');daltonize(I,'d');daltonize(I,'t')])
+%   >> imshow([I;daltonizer(I,'p');daltonizer(I,'d');daltonizer(I,'t')])
 %
 %% Notes %%
 %
@@ -94,9 +95,9 @@ function [dal,raw,cvd] = daltonize(rgb,typ,sev)
 %
 %% Output Arguments %%
 %
-%   dal = NumericArray, the same size and class as <rgb>, the daltonized
+%   dal = NumericArray, the same size and class as <rgb>, the daltonizerd
 %         (recolored) image. Float values are clipped to 0..1.
-%   raw = FloatArray, the same size as <rgb>, the daltonized image without
+%   raw = FloatArray, the same size as <rgb>, the daltonizerd image without
 %         clipping (i.e. values may be outside 0..1).
 %   cvd = NumericArray, the same size and class as <rgb>, containing the
 %         simulated CVD colors. Float values are clipped to 0..1.
@@ -106,7 +107,7 @@ function [dal,raw,cvd] = daltonize(rgb,typ,sev)
 % * MATLAB R2009b or later.
 % * cvdsim().
 %
-% See also CVDSIM MACHADO2010
+% See also CVDSIM MACHADO2010 MILIC2015
 % COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
 % SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
 
@@ -145,7 +146,7 @@ switch lower(typ)
 	case {'t','tritan','tritanopia','tritanomaly'}
 		e2m = [1.0,0.0,0.7; 0.0,1.0,0.7; 0.0,0.0,0.0];
 	otherwise
-		error('SC:daltonize:typ:NotSupported',...
+		error('SC:daltonizer:typ:NotSupported',...
 			'Second input <typ> "%s" is not supported: use "protan"/"deutan"/"tritan" or their full names or their initials.',typ)
 end
 %
@@ -162,7 +163,7 @@ else
 end
 %
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%daltonize
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%daltonizer
 function out = sGammaCor(inp)
 % Gamma correction: Nx3 linear RGB -> Nx3 sRGB.
 idx = inp > 0.0031308;

@@ -1,6 +1,6 @@
 # ColorVisionDeficiency #
 
-MATLAB functions for simulating color vision deficiency (CVD/colorblindness) and recoloring images (daltonize) to improve visual contrast for CVD observers.
+MATLAB functions for simulating color vision deficiency (CVD/colorblindness) and recoloring images (daltonizer) to improve visual contrast for CVD observers.
 
 ## Overview ##
 
@@ -9,7 +9,7 @@ This repository contains:
 | Function | Description | Algorithm |
 | --- | --- | --- |
 | `cvdsim` | Simulate how RGB colors, colormaps, or images may appear to observers with protan, deutan, or tritan color vision deficiency | Machado, Oliveira and Fernandes (2009) |
-| `daltonize` | Recolor RGB images using a fixed error-redistribution method. Because it is pointwise, it also works with RGB triples and colormaps | Fidaner, Lin & Ozguven (2005) |
+| `daltonizer` | Recolor RGB images using a fixed error-redistribution method. Because it is pointwise, it also works with RGB triples and colormaps | Fidaner, Lin & Ozguven (2005) |
 | `machado2010` | Recolor RGB images using a projection-based contrast enhancement method | Machado and Oliveira (2010) |
 | `milic2015` | Recolor RGB images using a content-dependent naturalness-preserving daltonization method | Milić, Hoffmann, Tómács, Novaković and Milosavljević (2015) |
 
@@ -25,7 +25,7 @@ The functions are self-contained MATLAB code and do not require any toolboxes.
 
 Use `cvdsim` when you want to *check* how colors may look to someone with CVD.
 
-Use `daltonize` when you want a simple, fast image recoloring method. It is the easiest option to apply to images, RGB values, and MATLAB colormaps, but because it is fixed and content-independent it can sometimes overcorrect.
+Use `daltonizer` when you want a simple, fast image recoloring method. It is the easiest option to apply to images, RGB values, and MATLAB colormaps, but because it is fixed and content-independent it can sometimes overcorrect.
 
 Use `machado2010` when you want an image-dependent recoloring method based on local color-contrast loss. It is intended for dichromats and can preserve temporal coherence across image sequences when previous-state outputs are reused.
 
@@ -43,7 +43,7 @@ These functions support the main families of color vision deficiency:
 
 The functions accept common MATLAB numeric RGB data. Floating-point inputs use the range `0..1`; integer inputs use up to intmax. The main output preserves the input class.
 
-`cvdsim` and `daltonize` work with both `Nx3` colormaps and `RxCx3` images. `machado2010` and `milic2015` work with `RxCx3` images only, because their algorithms depend on spatial image structure.
+`cvdsim` and `daltonizer` work with both `Nx3` colormaps and `RxCx3` images. `machado2010` and `milic2015` work with `RxCx3` images only, because their algorithms depend on spatial image structure.
 
 ---
 
@@ -53,7 +53,7 @@ These functions are not a universal solution to color vision deficiency. Recolor
 
 `cvdsim` provides a model-based simulation, not a guarantee of how any particular person will perceive an image. Real perception varies between observers, displays, viewing conditions, and adaptation states.
 
-`daltonize` is intentionally simple and content-independent. It can be very convenient, especially for colormaps, but it does not know whether an image actually needs strong correction.
+`daltonizer` is intentionally simple and content-independent. It can be very convenient, especially for colormaps, but it does not know whether an image actually needs strong correction.
 
 `machado2010` and `milic2015` are intended for image recoloring, not arbitrary colormaps. They also target dichromatic recoloring rather than providing a continuous anomalous-trichromacy severity parameter.
 
@@ -68,8 +68,8 @@ cvd = cvdsim(rgb,typ)
 cvd = cvdsim(rgb,typ,sev)
 cvd = cvdsim(rgb,typ,sev,gamma)
 
-rgb = daltonize(rgb,typ)
-rgb = daltonize(rgb,typ,sev)
+rgb = daltonizer(rgb,typ)
+rgb = daltonizer(rgb,typ,sev)
 
 rgb = machado2010(rgb,typ)
 rgb = machado2010(rgb,typ,exaggerate)
@@ -117,7 +117,7 @@ Recolor an image with the fixed daltonization method:
 
 ```matlab
 I = imread("peppers.png");
-imshow(daltonize(I, 'deutan', 0.6))
+imshow(daltonizer(I, 'deutan', 0.6))
 ```
 
 Recolor an image with `machado2010`:

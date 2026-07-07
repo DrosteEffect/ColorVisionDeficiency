@@ -1,5 +1,5 @@
 function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
-% Real-time color contrast enhancement for dichromats (Machado & Oliveira, 2010)
+% Image color contrast enhancement for CVD/dichromats (Machado et al, 2010)
 %
 % (c) 2026 Stephen Cobeldick
 %
@@ -131,13 +131,13 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %
 % * MATLAB R2009b or later.
 %
-% See also CVDSIM DALTONIZE
+% See also CVDSIM DALTONIZER MILIC2015
 % COLORMAP COLORORDER MAXDISTCOLOR BREWERMAP
 % SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
 
 % Release | Feature
 % --------|--------
-% R2016b  | string class                                  [only if supplied]
+% R2016b  | string class                                 [only if supplied]
 % R2009b  | tilde argument placeholder
 % R2008a  | assert: message-identifier
 %
