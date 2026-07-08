@@ -1,5 +1,5 @@
 function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev,gamma)
-% Simulate color vision deficiency (CVD: protanomaly, deuteranomaly, tritanomaly)
+% Simulate dichromat color vision deficiency (CVD) for a trichromat observer.
 %
 % (c) 2026 Stephen Cobeldick
 %

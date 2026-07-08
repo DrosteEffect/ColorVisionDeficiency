@@ -1,6 +1,6 @@
 # Daltonizer for Color Vision Deficiency #
 
-MATLAB functions for simulating dichromatic color vision deficiency (CVD/colorblindness) and recoloring images (daltonizer) to improve visual contrast for dichromatic CVD observers.
+MATLAB functions for simulating dichromatic color vision deficiency (CVD/colorblindness) and recoloring images to improve visual contrast for dichromatic CVD observers (daltonizer).
 
 ## Overview ##
 
@@ -8,14 +8,14 @@ This repository contains:
 
 | Function | Description | Algorithm |
 | --- | --- | --- |
-| `cvdsim` | Simulate how RGB colors, colormaps, or images may appear to observers with dichromatic color vision deficiency | Machado, Oliveira and Fernandes (2009) |
-| `daltonizer` | Recolor RGB images using a fixed error-redistribution enhancement. Because it is pointwise, it also works with RGB triples and colormaps | Fidaner, Lin & Ozguven (2005) |
-| `machado2010` | Recolor RGB images using a projection-based contrast enhancement | Machado and Oliveira (2010) |
-| `milic2015` | Recolor RGB images using a content-dependent naturalness-preserving enhancement | Milić, Hoffmann, Tómács, Novaković and Milosavljević (2015) |
+| `cvdsim` | Simulate how RGB colors, colormaps, or images may appear to observers with dichromatic color vision deficiency. | Machado, Oliveira and Fernandes (2009) |
+| `daltonizer` | Recolor RGB images using a fixed error-redistribution enhancement. Because it is pointwise, it also works with RGB triples and colormaps. Calls `cvdsim`. | Fidaner, Lin & Ozguven (2005) |
+| `machado2010` | Recolor RGB images using a projection-based contrast enhancement. | Machado and Oliveira (2010) |
+| `milic2015` | Recolor RGB images using a content-dependent naturalness-preserving enhancement. | Milić, Hoffmann, Tómács, Novaković and Milosavljević (2015) |
 
 The three recoloring functions all have the same broad purpose: they modify RGB images to make information more distinguishable to observers with dichromatic color vision deficiency. They differ mainly in how much image context they use and what trade-off they make between visibility, naturalness, simplicity, and repeatability.
 
-`cvdsim` does the complementary task: it does not improve an image, but simulates how colors may be perceived by a dichromatic CVD observer. This is useful when checking figures, colormaps, plots, diagrams, GUIs, and images for colorblind accessibility.
+`cvdsim` does the complementary task: it does not improve an image, but simulates for a normal trichromat observer how RGB colors may be perceived by a dichromatic CVD observer. This is useful when checking figures, colormaps, plots, diagrams, GUIs, and images for colorblind accessibility.
 
 The functions are self-contained MATLAB code and do not require any toolboxes.
 
@@ -27,7 +27,7 @@ Use `cvdsim` when you want to *check* how colors may look to someone with dichro
 
 Use `daltonizer` when you want a simple, fast image recoloring method. It is the easiest option to apply to images, RGB values, and MATLAB colormaps, but because it is fixed and content-independent it can sometimes overcorrect.
 
-Use `machado2010` when you want an image-dependent recoloring method based on local color-contrast loss. It can preserve temporal coherence across image sequences when previous-state outputs are reused (i.e. it can be used with video data).
+Use `machado2010` when you want an image-dependent recoloring method based on local color-contrast loss. It can preserve temporal coherence across image sequences when previous-state outputs are reused (i.e. it can be used for processing video data).
 
 Use `milic2015` when you want an image-dependent recoloring method that aims to preserve naturalness by segmenting image chromaticities before recoloring. It exposes several options because the underlying paper leaves some implementation choices to the user.
 

@@ -1,5 +1,5 @@
 function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
-% Image color contrast enhancement for CVD/dichromats (Machado et al, 2010)
+% Image rgb color contrast enhancement for CVD/dichromats (Machado et al, 2010)
 %
 % (c) 2026 Stephen Cobeldick
 %

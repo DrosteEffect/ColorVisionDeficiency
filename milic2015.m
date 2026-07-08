@@ -1,5 +1,5 @@
 function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
-% Naturalness-preserving image color enhancement for CVD/dichromats (Milić et al, 2015)
+% Naturalness-preserving image rgb color enhancement for CVD/dichromats (Milić et al, 2015)
 %
 % (c) 2026 Stephen Cobeldick
 %
@@ -93,21 +93,21 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 %% Notes %%
 %
 % * This implementation is intentionally restricted to RGB images of size
-% RxCx3. Nx3 colormaps/color lists are not supported because the method
-% is defined using image segmentation.
+%   RxCx3. Nx3 colormaps are not supported because the method is defined
+%   using image segmentation.
 % * This implementation performs chromatic remapping only. The optional
-% lightness remapping idea mentioned by the paper is not implemented
-% because the paper does not specify an algorithm for it.
+%   lightness remapping idea mentioned by the paper is not implemented
+%   because the paper does not specify an algorithm for it.
 % * Anomalous trichromacy is not supported. Although the paper states that
-% the concept can be adapted to anomalous trichromacy, it does not define
-% the required anomalous confusion-line geometry.
+%   the concept can be adapted to anomalous trichromacy, it does not
+%   define the required anomalous confusion-line geometry.
 % * Empty k-means clusters are silently removed. This avoids arbitrary
-% reseeding rules and keeps the effective set of segment centers equal to
-% the non-empty image segments.
+%   reseeding rules and keeps the effective set of segment centers equal
+%   to the non-empty image segments.
 % * This implementation leaves the random number generator untouched:
-% users who require reproducible segmentation should set and restore the
-% RNG state outside this function using whatever seed-control API is
-% appropriate for their MATLAB release.
+%   users who require reproducible segmentation should set and restore
+%   RNG state outside this function using whatever seed-control API is
+%   appropriate for their MATLAB release.
 %
 %% Input Arguments %%
 %

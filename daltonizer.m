@@ -1,5 +1,5 @@
 function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
-% Image color contrast enhancement for CVD/dichromats (Fidaner et al, 2005)
+% Image rgb color contrast enhancement for CVD/dichromats (Fidaner et al, 2005)
 %
 % (c) 2026 Stephen Cobeldick
 %
@@ -31,7 +31,7 @@ function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
 % a single re-encode at the end (matching CVDSIM's own linear-light
 % pipeline): doing the error/redistribution arithmetic directly on
 % gamma-encoded values is not physically meaningful, since color mixing
-% is additive in linear light, not in gamma-encoded space.
+% is additive in linear RGB, not in gamma-encoded space (e.g. sRGB).
 %
 % The error-redistribution matrix is type-specific: many public
 % implementations reuse the protanopia matrix for all three types,
@@ -97,7 +97,7 @@ function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
 %
 %   dal = NumericArray, the same size and class as <rgb>, the daltonizerd
 %         (recolored) image. Float values are clipped to 0..1.
-%   raw = FloatArray, the same size as <rgb>, the daltonizerd image without
+%   raw = FloatArray, the same size as <rgb>, the daltonized image without
 %         clipping (i.e. values may be outside 0..1).
 %   cvd = NumericArray, the same size and class as <rgb>, containing the
 %         simulated CVD colors. Float values are clipped to 0..1.
@@ -119,7 +119,7 @@ function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
 %
 %% Input Wrangling %%
 %
-% CVDSIM performs input checking, LIN & SIM are Nx3:
+% CVDSIM performs input checking, LIN & SIM are Nx3 float 0..1:
 if nargin<3
 	[cvd,~,lin,sim] = cvdsim(rgb,typ);
 else
