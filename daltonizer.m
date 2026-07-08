@@ -95,20 +95,20 @@ function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
 %
 %% Output Arguments %%
 %
-%   dal = NumericArray, the same size and class as <rgb>, the daltonizerd
-%         (recolored) image. Float values are clipped to 0..1.
-%   raw = FloatArray, the same size as <rgb>, the daltonized image without
+%   dal = NumericArray, the same size and class as <rgb>, the enhanced
+%         (daltonized/recolored) image. Float values are clipped to 0..1.
+%   raw = FloatArray, the same size as <rgb>, the enhanced image without
 %         clipping (i.e. values may be outside 0..1).
 %   cvd = NumericArray, the same size and class as <rgb>, containing the
-%         simulated CVD colors. Float values are clipped to 0..1.
+%         simulated CVD colors from CVDSIM. Float values are clipped to 0..1.
 %
 %% Dependencies %%
 %
 % * MATLAB R2009b or later.
 % * cvdsim().
 %
-% See also CVDSIM MACHADO2010 MILIC2015
-% COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
+% See also BRETTEL1997 CVDSIM MACHADO2010 MILIC2015
+% PARULA LINES COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
 % SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
 
 % Release | Feature

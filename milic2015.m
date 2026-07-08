@@ -124,9 +124,9 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 %
 %% Output Arguments %%
 %
-%   rec  = NumericArray, the same size and class as <rgb>, the recolored
-%          image. Float values are clipped to 0..1.
-%   raw  = FloatArray, the same size as <rgb>, the recolored image without
+%   rec  = NumericArray, the same size and class as <rgb>, the enhanced
+%          (daltonized/recolored) image. Float values are clipped to 0..1.
+%   raw  = FloatArray, the same size as <rgb>, the enhanced image without
 %          clipping (i.e. values may be outside 0..1, depending on LUV2RGB).
 %   ctr0 = FloatArray, size Mx3, the original non-empty segment centers in
 %          CIE L*u'v', where M is the effective number of non-empty segments.
@@ -139,9 +139,8 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 % * MATLAB R2009b or later.
 % * No toolboxes are required.
 %
-% See also CVDSIM DALTONIZER MACHADO2010
-% COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
-% SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
+% See also BRETTEL1997 CVDSIM DALTONIZER MACHADO2010
+% IMSHOW PARULA LINES COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
 
 % Release | Feature
 % --------|--------
@@ -550,7 +549,7 @@ end
 			'The <wpt> value cannot be complex.')
 		assert(numel(arg)==3 && all(arg(:)>0) && arg(2)==1,...
 			'SC:milic2015:wpt:InvalidValue',...
-			'The <wpt> value must be a 1x3 numeric vector where 0<=wpt and wpt(2)==1.')
+			'The <wpt> value must be a 1x3 numeric vector where wpt>0 and wpt(2)==1.')
 		arg = reshape(double(arg),1,3);
 	end
 %

@@ -120,9 +120,9 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %
 %% Output Arguments %%
 %
-%   rec = NumericArray, the same size and class as <rgb>, the recolored
-%         image. Float values are clipped to 0..1.
-%   raw = FloatArray, the same size as <rgb>, the recolored image without
+%   rec = NumericArray, the same size and class as <rgb>, the enhanced
+%         (daltonized/recolored) image. Float values are clipped to 0..1.
+%   raw = FloatArray, the same size as <rgb>, the enhanced image without
 %         clipping (i.e. values may be outside 0..1, depending on LAB2RGB).
 %   cd1 = FloatVector, size 1x2, the chromatic direction used for recoloring.
 %   pm1 = NumericVector, size R*Cx1, the pixel-pair map used for this call.
@@ -131,9 +131,8 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %
 % * MATLAB R2009b or later.
 %
-% See also CVDSIM DALTONIZER MILIC2015
-% COLORMAP COLORORDER MAXDISTCOLOR BREWERMAP
-% SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
+% See also BRETTEL1997 CVDSIM DALTONIZER MILIC2015
+% IMSHOW PARULA LINES COLORMAP COLORORDER MAXDISTCOLOR BREWERMAP
 
 % Release | Feature
 % --------|--------
@@ -187,7 +186,7 @@ end
 if nargin<3 || isempty(exg)
 	exg = false;
 else
-	assert(isequal(exg,0)||isequal(exg,1),...
+	assert(isequal(exg,false)||isequal(exg,true),...
 		'SC:machado2010:exg:NotScalar',...
 		'Third input <exg> must be a true/1 or false/0.')
 	exg = logical(exg);

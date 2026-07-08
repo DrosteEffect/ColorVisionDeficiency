@@ -84,9 +84,8 @@ function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev,gamma)
 %
 % * MATLAB R2008a or later.
 %
-% See also DALTONIZER MACHADO2010 MILIC2015
-% COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
-% SRGB_TO_CAM02UCS CAM02UCS_TO_SRGB SRGB_TO_CAM16UCS CAM16UCS_TO_SRGB
+% See also BRETTEL1997 DALTONIZER MACHADO2010 MILIC2015
+% IMSHOW PARULA LINES COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
 
 % Release | Feature
 % --------|--------
@@ -147,7 +146,7 @@ end
 if nargin<4
 	gamma = true;
 else
-	assert(isequal(gamma,0)||isequal(gamma,1),...
+	assert(isequal(gamma,false)||isequal(gamma,true),...
 		'SC:cvdsim:gamma:NotScalarLogical',...
 		'Fourth input <sev> must be true/1 or false/0.')
 	gamma = logical(gamma);
