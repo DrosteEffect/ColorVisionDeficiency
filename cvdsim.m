@@ -26,10 +26,10 @@ function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev,gamma)
 %
 % The simulated color is obtained by multiplying the linearized input sRGB
 % values with a 3x3 matrix <mat>, selected according to <typ> and <sev>.
-% Marix <mat> is obtained by linearly interpolating between the two nearest
-% of the eleven matrices published by the paper's authors (tabulated at
-% severity steps of 0.1); this is the fast approximation recommended by
-% the authors themselves for intermediate severities.
+% Matrix <mat> is obtained by linearly interpolating between the two
+% nearest of the eleven matrices published by the paper's authors
+% (tabulated at severity steps of 0.1); this is the fast approximation
+% recommended by the authors themselves for intermediate severities.
 %
 %% Examples %%
 %
@@ -148,7 +148,7 @@ if nargin<4
 else
 	assert(isequal(gamma,false)||isequal(gamma,true),...
 		'SC:cvdsim:gamma:NotScalarLogical',...
-		'Fourth input <sev> must be true/1 or false/0.')
+		'Fourth input <gamma> must be true/1 or false/0.')
 	gamma = logical(gamma);
 end
 %

@@ -66,7 +66,8 @@ function [cvd,raw,lms,sim,opts] = brettel1997(rgb,typ,opts,varargin)
 % Field   | Permitted | Description:
 % Name:   | Values:   |
 % ========|===========|====================================================
-% gamma   | logical   | Apply inverse/forward sRGB gamma correction. (true**)
+% gamma   | true**    | Apply inverse/forward sRGB transfer correction.
+%         | false     | Apply the simulation directly to the <rgb> values.
 % --------|-----------|----------------------------------------------------
 % wpt     | 1x3 float | XYZ reference white point, scaled Y==1.
 %         |           | Default is D65: [0.95047,1,1.08883].
@@ -245,11 +246,7 @@ switch nargin
 		opts = structfun(@mSS2C,opts,'UniformOutput',false);
 		stpo = mOptions(stpo,opts);
 	otherwise % options as <name-value> pairs
-		tmp = [{opts},varargin];
-		assert(mod(numel(tmp),2)==0,...
-			'SC:brettel1997:options:NameValuePairsNotPaired',...
-			'Options supplied as name-value pairs must have one value for every name.')
-		tmp = cellfun(@mSS2C,tmp,'UniformOutput',false);
+		tmp = cellfun(@mSS2C,[{opts},varargin],'UniformOutput',false);
 		opts = cell2struct(tmp(2:2:end),tmp(1:2:end),2);
 		stpo = mOptions(stpo,opts);
 end
