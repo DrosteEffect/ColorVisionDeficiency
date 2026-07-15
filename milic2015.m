@@ -139,7 +139,7 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 % * MATLAB R2009b or later.
 % * No toolboxes are required.
 %
-% See also BRETTEL1997 CVDSIM DALTONIZER MACHADO2010
+% See also BRETTEL1997 CVDSIM DALTONIZER MACHADO2010 VIENOT1999
 % IMSHOW PARULA LINES COLORMAP COLORORDER BREWERMAP MAXDISTCOLOR
 
 % Release | Feature
