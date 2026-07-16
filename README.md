@@ -9,14 +9,14 @@ MATLAB functions for simulating dichromatic color vision deficiency (CVD/colorbl
 
 This repository contains:
 
-| Function | Description | Algorithm |
-| --- | --- | --- |
-| `brettel1997` | Simulate how RGB colors, colormaps, or images may appear to observers with dichromatic color vision deficiency. Modernised for sRGB. | Brettel, Viénot and Mollon (1997) |
-| `vienot1999` | Simulate how RGB colors, colormaps, or images may appear to protanopic or deuteranopic observers. Modernised for sRGB. | Viénot, Brettel and Mollon (1999) |
-| `cvdsim` | Simulate how RGB colors, colormaps, or images may appear to observers with dichromatic color vision deficiency. | Machado, Oliveira and Fernandes (2009) |
-| `daltonizer` | Enhance RGB images using a fixed error-redistribution enhancement. Because it is pointwise, it also works with RGB triples and colormaps. Calls `cvdsim`. | Fidaner, Lin &amp; Ozguven (2005) |
-| `machado2010` | Enhance RGB images using a projection-based contrast enhancement. | Machado and Oliveira (2010) |
-| `milic2015` | Enhance RGB images using a content-dependent naturalness-preserving enhancement. | Milić, Hoffmann, Tómács, Novaković and Milosavljević (2015) |
+| Function | Purpose | Description | Algorithm |
+| --- | --- | --- | --- |
+| `brettel1997` | Simulate | Projects colors onto one of two reduced-stimulus dichromat half-planes in LMS space, with configurable RGB/XYZ/LMS conversions and spectral anchors. | Brettel, Viénot and Mollon (1997) |
+| `cvdsim` | Simulate | Interpolates and applies tabulated 3×3 linear-RGB transformation matrices to simulate protan, deutan, or tritan deficiency with adjustable severity. | Machado, Oliveira and Fernandes (2009) |
+| `daltonizer` | Enhance | Simulates CVD with `cvdsim`, redistributes the lost linear-light error into visible channels, and adds it back to the original colors. | Fidaner, Lin & Ozguven (2005) |
+| `machado2010` | Enhance | Estimates the dominant local color-contrast loss direction in CIE L\*a\*b\* and remaps projected chromatic coordinates onto an approximate dichromat gamut-plane direction. | Machado and Oliveira (2010) |
+| `milic2015` | Enhance | Segments CIE L\*u'v' chromaticities and rotates segment centers around dichromatic confusion points to preserve naturalness. | Milić, Hoffmann, Tómács, Novaković and Milosavljević (2015) |
+| `vienot1999` | Simulate | Projects colors onto a single reduced-stimulus LMS plane for protanopic and deuteranopic simulation, using the display blue primary as the plane anchor. | Viénot, Brettel and Mollon (1999) |
 
 The enhancement functions all have the same broad purpose: they modify RGB images to make information more distinguishable to observers with dichromatic color vision deficiency. They differ mainly in how much image context they use and what trade-off they make between visibility, naturalness, simplicity, and repeatability.
 
@@ -32,8 +32,6 @@ I recommend starting with `cvdsim` and `daltonizer`.
 
 Use `brettel1997` when you want to *check* how colors may look to someone with dichromatic CVD. This is a classic algorithm which has been modified to work with sRGB images and colormaps.
 
-Use `vienot1999` when you want to *check* how colors may look to a protanope or deuteranope using the simpler single-plane reduction scheme of Viénot, Brettel and Mollon. This implementation modernizes the original digital-video colourmap method for sRGB images and colormaps, rather than reproducing the fixed CRT colourmaps from the paper.
-
 Use `cvdsim` when you want to *check* how colors may look to someone with dichromatic CVD. This is a simple, fast, and easy function to apply to images, RGB values, and colormaps.
 
 Use `daltonizer` when you want a simple, fast image recoloring method. It is the easiest function to apply to images, RGB values, and MATLAB colormaps, but because it is fixed and content-independent it can sometimes overcorrect.
@@ -41,6 +39,8 @@ Use `daltonizer` when you want a simple, fast image recoloring method. It is the
 Use `machado2010` when you want an image-dependent recoloring method based on local color-contrast loss. It can preserve temporal coherence across image sequences when previous-state outputs are reused (i.e. it can be used for processing video data).
 
 Use `milic2015` when you want an image-dependent recoloring method that aims to preserve naturalness by segmenting image chromaticities before recoloring. It exposes several options because the underlying paper leaves some implementation choices to the user.
+
+Use `vienot1999` when you want to *check* how colors may look to a protanope or deuteranope using the simpler single-plane reduction scheme of Viénot, Brettel and Mollon. This implementation modernizes the original digital-video colourmap method for sRGB images and colormaps, rather than reproducing the fixed CRT colourmaps from the paper.
 
 ---
 
@@ -64,11 +64,11 @@ These functions are not a universal solution to color vision deficiency. Enhance
 
 `cvdsim` provides a model-based simulation, not a guarantee of how any particular person will perceive an image. Real perception varies between observers, displays, viewing conditions, and adaptation states.
 
-`vienot1999` models only the protanopic and deuteranopic cases defined by Viénot et al. (1999). Tritan simulation and anomalous trichromacy are not implemented by this algorithm.
-
 `daltonizer` is intentionally simple and content-independent. It can be very convenient, especially for colormaps, but it does not know whether any particular image content actually needs strong correction.
 
 `machado2010` and `milic2015` are intended for image recoloring, not arbitrary colormaps. They also target dichromatic recoloring rather than providing a continuous anomalous-trichromacy severity parameter.
+
+`vienot1999` models only the protanopic and deuteranopic cases defined by Viénot et al. (1999). Tritan simulation and anomalous trichromacy are not implemented by this algorithm.
 
 For tritan simulation, `cvdsim` follows the Machado et al. matrices, which approximate tritanomaly; true complete S-cone loss is not explicitly modeled by those source matrices.
 
@@ -80,10 +80,6 @@ For tritan simulation, `cvdsim` follows the Machado et al. matrices, which appro
 cvd = brettel1997(rgb,typ)
 cvd = brettel1997(rgb,typ,options)
 cvd = brettel1997(rgb,typ,'name',value,...)
-
-cvd = vienot1999(rgb,typ)
-cvd = vienot1999(rgb,typ,options)
-cvd = vienot1999(rgb,typ,'name',value,...)
 
 cvd = cvdsim(rgb,typ)
 cvd = cvdsim(rgb,typ,sev)
@@ -98,6 +94,10 @@ rgb = machado2010(rgb,typ,exaggerate)
 rgb = milic2015(rgb,typ)
 rgb = milic2015(rgb,typ,options)
 rgb = milic2015(rgb,typ,'name',value,...)
+
+cvd = vienot1999(rgb,typ)
+cvd = vienot1999(rgb,typ,options)
+cvd = vienot1999(rgb,typ,'name',value,...)
 ```
 
 Accepted type names include:

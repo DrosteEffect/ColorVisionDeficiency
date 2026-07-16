@@ -39,6 +39,9 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 % column offsets. Inputs such as Nx3 colormaps therefore have no defined
 % image-space neighborhood in this implementation.
 %
+% This implementation uses D65-referenced CEILab, matching sRGB (the
+% original paper does not specify a reference white).
+%
 % This implementation leaves the random number generator untouched: users
 % who require reproducible recoloring, e.g. for tests or video processing,
 % should set and restore the RNG state outside this function using whatever
