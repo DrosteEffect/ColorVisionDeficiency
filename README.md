@@ -44,6 +44,20 @@ Use `vienot1999` when you want to *check* how colors may look to a protanope or 
 
 ---
 
+## Image Examples ##
+
+| Function | Purpose | Protan | Deutan | Tritan |
+| :------- | :------ | :----: | :----: | :----: |
+| | Original | ![Original image](./Images/original.jpg) | ![Original image](./Images/original.jpg) | ![Original image](./Images/original.jpg) |
+| brettel1997 | Simulate | ![Simulated image for protan](./Images/protan_brettel1997.jpg) | ![Simulated image for deutan](./Images/deutan_brettel1997.jpg) | ![Simulated image for tritan](./Images/tritan_brettel1997.jpg) |
+| cvdsim | Simulate | ![Simulated image for protan](./Images/protan_cvdsim.jpg) | ![Simulated image for deutan](./Images/deutan_cvdsim.jpg) | ![Simulated image for tritan](./Images/tritan_cvdsim.jpg) |
+| daltonizer | Enhance | ![Enhanced image for protan](./Images/protan_daltonizer.jpg) | ![Enhanced image for deutan](./Images/deutan_daltonizer.jpg) | ![Enhanced image for tritan](./Images/tritan_daltonizer.jpg) |
+| machado2010 | Enhance | ![Enhanced image for protan](./Images/protan_machado2010.jpg) | ![Enhanced image for deutan](./Images/deutan_machado2010.jpg) | ![Enhanced image for tritan](./Images/tritan_machado2010.jpg) |
+| milic2015 | Enhance | ![Enhanced image for protan](./Images/protan_milic2015.jpg) | ![Enhanced image for deutan](./Images/deutan_milic2015.jpg) | ![Enhanced image for tritan](./Images/tritan_milic2015.jpg) |
+| vienot1999 | Simulate | ![Simulated image for protan](./Images/protan_vienot1999.jpg) | ![Simulated image for deutan](./Images/deutan_vienot1999.jpg) | NA |
+
+---
+
 ## What These Functions Can Do ##
 
 These functions support the main types of dichromatic color vision deficiency:
@@ -79,7 +93,7 @@ For tritan simulation, `cvdsim` follows the Machado et al. matrices, which appro
 ```matlab
 cvd = brettel1997(rgb,typ)
 cvd = brettel1997(rgb,typ,options)
-cvd = brettel1997(rgb,typ,'name',value,...)
+cvd = brettel1997(rgb,typ,'name',value,..)
 
 cvd = cvdsim(rgb,typ)
 cvd = cvdsim(rgb,typ,sev)
@@ -93,11 +107,11 @@ rgb = machado2010(rgb,typ,exaggerate)
 
 rgb = milic2015(rgb,typ)
 rgb = milic2015(rgb,typ,options)
-rgb = milic2015(rgb,typ,'name',value,...)
+rgb = milic2015(rgb,typ,'name',value,..)
 
 cvd = vienot1999(rgb,typ)
 cvd = vienot1999(rgb,typ,options)
-cvd = vienot1999(rgb,typ,'name',value,...)
+cvd = vienot1999(rgb,typ,'name',value,..)
 ```
 
 Accepted type names include:
@@ -112,7 +126,7 @@ See the help text in each M-file for the full calling syntax, optional outputs, 
 
 ---
 
-## Examples ##
+## Code Examples ##
 
 Simulate a single RGB triple for protanopia, using `brettel1997`, `vienot1999`, and `cvdsim`:
 
@@ -177,27 +191,31 @@ imshow(milic2015(I,'deutan', 'nseg',4, 'ang',4))
 
 - Brettel, H., Viénot, F., &amp; Mollon, J. D. (1997).
   "Computerized simulation of color appearance for dichromats", Journal of the Optical Society of America A, 14(10), 2647-2655.
-  &lt;https://vision.psychol.cam.ac.uk/jdmollon/papers/Dichromatsimulation.pdf&gt;
+  <https://vision.psychol.cam.ac.uk/jdmollon/papers/Dichromatsimulation.pdf>
 
 - Viénot, F., Brettel, H., &amp; Mollon, J. D. (1999).
   "Digital Video Colourmaps for Checking the Legibility of Displays by Dichromats", Color Research and Application, 24(4), 243-252.
-  &lt;https://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf&gt;
+  <https://vision.psychol.cam.ac.uk/jdmollon/papers/colourmaps.pdf>
 
 - Machado G. M., Oliveira M. M., Fernandes L. A. F.
   "A Physiologically-based Model for Simulation of Color Vision Deficiency", IEEE TVCG 15(6):1291–1298, 2009.
-  &lt;https://doi.org/10.1109/TVCG.2009.113&gt;
-  &lt;https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html&gt;
+  <https://doi.org/10.1109/TVCG.2009.113>
+  <https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html>
 
 - Fidaner O., Lin P., Ozguven N.
   "Analysis of Color Blindness", 2005.
-  &lt;https://acorn.stanford.edu/psych221/projects/2005/ofidaner/project_report.pdf&gt;
+  <https://acorn.stanford.edu/psych221/projects/2005/ofidaner/project_report.pdf>
 
 - Machado G. M., Oliveira M. M.
   "Real-Time Temporal-Coherent Color Contrast Enhancement for Dichromats", Computer Graphics Forum 29(3):933–942, 2010.
-  &lt;https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_PCA/Machado_Oliveira_EuroVis2010.pdf&gt;
+  <https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_PCA/Machado_Oliveira_EuroVis2010.pdf>
 
 - Milić N., Hoffmann M., Tómács T., Novaković D., Milosavljević B.
   "A Content-Dependent Naturalness-Preserving Daltonization Method for Dichromatic and Anomalous Trichromatic Color Vision Deficiencies", Journal of Imaging Science and Technology 59(1):010504, 2015.
-  &lt;https://www.researchgate.net/publication/276455941_A_Content-Dependent_Naturalness-Preserving_Daltonization_Method_for_Dichromatic_and_Anomalous_Trichromatic_Color_Vision_Deficiencies&gt;
+  <https://www.researchgate.net/publication/276455941_A_Content-Dependent_Naturalness-Preserving_Daltonization_Method_for_Dichromatic_and_Anomalous_Trichromatic_Color_Vision_Deficiencies>
+
+- Peggy Greb, U.S. Department of Agriculture
+  "Fresh cut fruits and vegetables.jpg" (public domain image).
+  <https://commons.wikimedia.org/wiki/File:Fresh_cut_fruits_and_vegetables.jpg>
 
 ---
