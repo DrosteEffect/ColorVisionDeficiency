@@ -70,8 +70,8 @@ function [cvd,raw,lin,sim] = cvdsim(rgb,typ,sev,gamma)
 %                  linear RGB, then reapply sRGB gamma correction.
 %                  This is the theoretically correct interpretation.
 %         false  = apply the simulation matrices directly to sRGB values
-%                  values without gamma correction. This more closely
-%                  reproduces the images embedded in Machado (2009) PDF.
+%                  without gamma correction. This more closely reproduces
+%                  the images that are embedded in Machado (2009) PDF.
 %
 %% Output Arguments %%
 %

@@ -61,7 +61,7 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %
 %   >> I = imread("peppers.png");
 %   >> imshow(machado2010(I,'deutan'))
-%   >> imshow(machado2010(I,'protan',true)) % exagerated
+%   >> imshow(machado2010(I,'protan',true)) % exaggerated
 %
 %%% Preserve temporal coherence across frames %%%
 %
@@ -106,9 +106,9 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %         Dimensions 1 and 2 are interpreted as rows and columns
 %         respectively, dimension 3 encodes the R,G,B values.
 %   typ = CharRowVector or StringScalar, the type of dichromacy to correct for:
-%         'p' / 'protan' / 'protanopia'   / 'protanomaly'   (L-cone deficiency).
-%         'd' / 'deutan' / 'deuteranopia' / 'deuteranomaly' (M-cone deficiency).
-%         't' / 'tritan' / 'tritanopia'   / 'tritanomaly'   (S-cone deficiency).
+%         'p' / 'protan' / 'protanopia'   (L-cone deficiency).
+%         'd' / 'deutan' / 'deuteranopia' (M-cone deficiency).
+%         't' / 'tritan' / 'tritanopia'   (S-cone deficiency).
 %   exg = LogicalScalar for selecting exaggerated contrast, where:
 %         true    => exaggerated contrast.
 %         false** => regular recoloring.
@@ -175,11 +175,11 @@ assert(ischar(typ)&&ndims(typ)==2&&size(typ,1)==1,...
 	'Second input <typ> must be a character vector or a string scalar.') %#ok<ISMAT>
 %
 switch lower(typ)
-	case {'p','protan','protanopia','protanomaly'}
+	case {'p','protan','protanopia'}
 		ang = -11.48;
-	case {'d','deutan','deuteranopia','deuteranomaly'}
+	case {'d','deutan','deuteranopia'}
 		ang = -8.11;
-	case {'t','tritan','tritanopia','tritanomaly'}
+	case {'t','tritan','tritanopia'}
 		ang = 46.37;
 	otherwise
 		error('SC:machado2010:typ:NotSupported',...

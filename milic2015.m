@@ -74,7 +74,9 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 %       | []**      | []** uses max(100,20*M), where M is the number
 %       |           | of non-empty segment centers.
 % ------|-----------|------------------------------------------------------
-% wpt   | 1x3 float | XYZ reference white point, scaled Y==1.
+% wpt   | 1x3 float | XYZ reference white point, scaled Y==1. This is used
+%       |           | for the L*u'v' conversion only. It does not
+%       |           | chromatically adapt the D65 sRGB-to-XYZ conversion.
 %
 %% Examples %%
 %

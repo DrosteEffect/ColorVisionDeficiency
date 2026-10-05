@@ -114,7 +114,7 @@ cvd = vienot1999(rgb,typ,options)
 cvd = vienot1999(rgb,typ,'name',value,..)
 ```
 
-Accepted type names include:
+Depending on the algorithm, the accepted type names generally include some or all of:
 
 ```matlab
 'p', 'protan', 'protanomaly', 'protanopia'

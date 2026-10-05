@@ -53,7 +53,7 @@ function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
 %   >> daltonizer([1,0,0], 'protan')
 %   ans = [1.0000  0.7213  0.7961]
 %
-%%% Daltonize an image for moderate deuteranopy %%%
+%%% Daltonize an image for moderate deuteranomaly %%%
 %
 %   >> I = imread("peppers.png");
 %   >> imshow(daltonizer(I, 'deutan',0.6))
