@@ -3,7 +3,7 @@
 [![View ColorVisionDeficiency on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/184209)
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=DrosteEffect/ColorVisionDeficiency)
 
-MATLAB functions for simulating dichromatic color vision deficiency (CVD/colorblindness) and enhancing images to improve visual contrast for dichromatic CVD observers (daltonization/recoloring).
+A collection of MATLAB functions for simulating color vision deficiency (CVD/colorblindness) and enhancing images to improve visual contrast for CVD observers (daltonization/recoloring). Several common forms of dichromatic and anomalous trichromatic CVD are supported.
 
 ## Overview ##
 
@@ -12,15 +12,15 @@ This repository contains:
 | Function | Purpose | Description | Algorithm |
 | --- | --- | --- | --- |
 | `brettel1997` | Simulate | Projects colors onto one of two reduced-stimulus dichromat half-planes in LMS space, with configurable RGB/XYZ/LMS conversions and spectral anchors. | Brettel, Viénot and Mollon (1997) |
-| `cvdsim` | Simulate | Interpolates and applies tabulated 3×3 linear-RGB transformation matrices to simulate protan, deutan, or tritan deficiency with adjustable severity. | Machado, Oliveira and Fernandes (2009) |
+| `cvdsim` | Simulate | Interpolates and applies tabulated 3×3 linear-RGB transformation matrices to simulate CVD, including anomalous trichromacy with adjustable severity. | Machado, Oliveira and Fernandes (2009) |
 | `daltonizer` | Enhance | Simulates CVD with `cvdsim`, redistributes the lost linear-light error into visible channels, and adds it back to the original colors. | Fidaner, Lin & Ozguven (2005) |
 | `machado2010` | Enhance | Estimates the dominant local color-contrast loss direction in CIE L\*a\*b\* and remaps projected chromatic coordinates onto an approximate dichromat gamut-plane direction. | Machado and Oliveira (2010) |
 | `milic2015` | Enhance | Segments CIE L\*u'v' chromaticities and rotates segment centers around dichromatic confusion points to preserve naturalness. | Milić, Hoffmann, Tómács, Novaković and Milosavljević (2015) |
 | `vienot1999` | Simulate | Projects colors onto a single reduced-stimulus LMS plane for protanopic and deuteranopic simulation, using the display blue primary as the plane anchor. | Viénot, Brettel and Mollon (1999) |
 
-The enhancement functions all have the same broad purpose: they modify RGB images to make information more distinguishable to observers with dichromatic color vision deficiency. They differ mainly in how much image context they use and what trade-off they make between visibility, naturalness, simplicity, and repeatability.
+The enhancement functions all have the same broad purpose: they modify RGB images to make information more distinguishable to observers with CVD. They differ mainly in how much image context they use and what trade-off they make between visibility, naturalness, simplicity, and repeatability.
 
-The simulation functions perform the complementary task: they simulate for a normal trichromat observer how RGB colors may be perceived by a dichromatic CVD observer. This is useful when checking colors, figures, colormaps, plots, diagrams, GUIs, and images for colorblind accessibility.
+The simulation functions perform the complementary task: they simulate for a normal trichromat observer how RGB colors may be perceived by a CVD observer. This is useful when checking colors, figures, colormaps, plots, diagrams, GUIs, and images for CVD accessibility.
 
 The functions are self-contained MATLAB code and do not require any toolboxes.
 
@@ -30,17 +30,17 @@ The functions are self-contained MATLAB code and do not require any toolboxes.
 
 I recommend starting with `cvdsim` and `daltonizer`.
 
-Use `brettel1997` when you want to *check* how colors may look to someone with dichromatic CVD. This is a classic algorithm which has been modified to work with sRGB images and colormaps.
+Use `brettel1997` when you want to *simulate* how colors may look to someone with dichromatic CVD. This is a classic algorithm which has been modified to work with sRGB images and colormaps.
 
-Use `cvdsim` when you want to *check* how colors may look to someone with dichromatic CVD. This is a simple, fast, and easy function to apply to images, RGB values, and colormaps.
+Use `cvdsim` when you want to *simulate* how colors may look to someone with dichromatic CVD. This is a simple, fast, and easy function to apply to images, RGB values, and colormaps.
 
-Use `daltonizer` when you want a simple, fast image recoloring method. It is the easiest function to apply to images, RGB values, and MATLAB colormaps, but because it is fixed and content-independent it can sometimes overcorrect.
+Use `daltonizer` when you want a simple, fast image *enhancement* method. It is the easiest function to apply to images, RGB values, and MATLAB colormaps, but because it is fixed and content-independent it can sometimes overcorrect.
 
-Use `machado2010` when you want an image-dependent recoloring method based on local color-contrast loss. It can preserve temporal coherence across image sequences when previous-state outputs are reused (i.e. it can be used for processing video data).
+Use `machado2010` when you want an image-dependent *enhancement* method based on local color-contrast loss. It can preserve temporal coherence across image sequences when previous-state outputs are reused (i.e. it can be used for processing video data).
 
-Use `milic2015` when you want an image-dependent recoloring method that aims to preserve naturalness by segmenting image chromaticities before recoloring. It exposes several options because the underlying paper leaves some implementation choices to the user.
+Use `milic2015` when you want an image-dependent *enhancement* method that aims to preserve naturalness by segmenting image chromaticities before recoloring. It exposes several options because the underlying paper leaves some implementation choices to the user.
 
-Use `vienot1999` when you want to *check* how colors may look to a protanope or deuteranope using the simpler single-plane reduction scheme of Viénot, Brettel and Mollon. This implementation modernizes the original digital-video colourmap method for sRGB images and colormaps, rather than reproducing the fixed CRT colourmaps from the paper.
+Use `vienot1999` when you want to *simulate* how colors may look to a protanope or deuteranope using the simpler single-plane reduction scheme of Viénot, Brettel and Mollon. This implementation modernizes the original digital-video colourmap method for sRGB images and colormaps, rather than reproducing the fixed CRT colourmaps from the paper.
 
 ---
 
@@ -60,7 +60,7 @@ Use `vienot1999` when you want to *check* how colors may look to a protanope or 
 
 ## What These Functions Can Do ##
 
-These functions support the main types of dichromatic color vision deficiency:
+These functions support some common types of CVD, including:
 
 - L-cone deficiency: protan / protanomaly / protanopia
 - M-cone deficiency: deutan / deuteranomaly / deuteranopia
@@ -74,7 +74,7 @@ The functions accept common MATLAB numeric RGB data. Floating-point inputs use t
 
 ## What These Functions Cannot Do ##
 
-These functions are not a universal solution to color vision deficiency. Enhancement is always a compromise: it can improve some distinctions while changing the appearance of the image, reducing naturalness, or introducing unwanted color shifts.
+These functions are not a universal solution to CVD. Enhancement is always a compromise: it can improve some distinctions while changing the appearance of the image, reducing naturalness, or introducing unwanted color shifts.
 
 `cvdsim` provides a model-based simulation, not a guarantee of how any particular person will perceive an image. Real perception varies between observers, displays, viewing conditions, and adaptation states.
 
