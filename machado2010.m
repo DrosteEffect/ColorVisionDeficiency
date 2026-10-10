@@ -92,9 +92,11 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %   (re)computed and returned as <pm1>: this is expected to be rare, and a
 %   caller intentionally varying frame size mid-sequence is assumed to be
 %   doing something unusual enough to not need a warning here.
-% * If every sampled pixel-pair has zero (or non-finite) measured contrast
-%   loss, the image is left unrecolored for that call (see the code comment
-%   above the relevant branch for the paper's justification for this choice).
+% * If the sampled pairs provide no non-zero weighted chromatic difference
+%   from which to estimate a loss direction, the image is left unrecolored
+%   for that call. This includes identical sampled pairs, lightness-only
+%   differences, and chromatic pairs with zero measured contrast loss.
+%   Non-finite internal results instead raise an error.
 % * For exaggerated contrast, chromaticity coordinates are scaled so that
 %   the maximum output chroma is 148, following the value stated by the
 %   paper. This is not the preferred/default use of the method.
@@ -102,7 +104,8 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %% Input Arguments (**=default) %%
 %
 %   rgb = NumericArray of sRGB values to convert, size RxCx3. Floating
-%         point values must be 0<=rgb<=1, integer values must be >=0.
+%         point values must be 0<=rgb<=1, whereas integer values must be
+%         in the range 0<=rgb<=intmax(class(rgb)).
 %         Dimensions 1 and 2 are interpreted as rows and columns
 %         respectively, dimension 3 encodes the R,G,B values.
 %   typ = CharRowVector or StringScalar, the type of dichromacy to correct for:
@@ -128,6 +131,8 @@ function [rec,raw,cd1,pm1] = machado2010(rgb,typ,exg,cd0,pm0)
 %   raw = FloatArray, the same size as <rgb>, the enhanced image without
 %         clipping (i.e. values may be outside 0..1, depending on LAB2RGB).
 %   cd1 = FloatVector, size 1x2, the chromatic direction used for recoloring.
+%         Returns [] when no chromatic-loss direction can be estimated
+%         and the image is therefore left unrecolored.
 %   pm1 = NumericVector, size R*Cx1, the pixel-pair map used for this call.
 %
 %% Dependencies %%
@@ -186,7 +191,7 @@ switch lower(typ)
 			'Second input <typ> "%s" is not supported: use "protan"/"deutan"/"tritan" or their full names or their initials.',typ)
 end
 %
-if nargin<3 || isempty(exg)
+if nargin<3 || isnumeric(exg)&&isempty(exg)
 	exg = false;
 else
 	assert(isequal(exg,false)||isequal(exg,true),...
@@ -195,16 +200,19 @@ else
 	exg = logical(exg);
 end
 %
-if nargin<4 || isempty(cd0)
+if nargin<4 || isnumeric(cd0)&&isempty(cd0)
 	tcd = [];
 else
 	assert(isnumeric(cd0)&&isreal(cd0)&&numel(cd0)==2,...
 		'SC:machado2010:cd0:InvalidSize',...
 		'Fourth input <cd0> must be empty or a real numeric vector with two elements.')
+	assert(all(isfinite(cd0(:))),...
+		'SC:machado2010:cd0:NotFinite',...
+		'Fourth input <cd0> must contain only finite values.')
 	tcd = reshape(double(cd0),1,2);
 end
 %
-if nargin<5 || isempty(pm0)
+if nargin<5 || isnumeric(pm0)&&isempty(pm0)
 	pm0 = [];
 else
 	assert(isnumeric(pm0)&&isreal(pm0)&&isvector(pm0),...
@@ -247,23 +255,28 @@ vec = dlt(:,2:3) .* los(:,[1,1]);
 %% Compute the Dominant Chromatic Loss Direction %%
 %
 A = vec.'*vec;
-isdeg = ~(any(isfinite(A(:))) && any(A(:)));
+%
+% A non-finite scatter matrix indicates an internal numerical failure, not
+% a valid no-recoloring case. With finite in-range RGB input, all preceding
+% Lab differences and contrast-loss values are expected to remain finite.
+if ~all(isfinite(A(:)))
+	error('SC:machado2010:InternalNonFiniteScatterMatrix',...
+		'Internal error: the chromatic-loss scatter matrix contains non-finite values.')
+end
+%
+isdeg = ~any(A(:));
 if isdeg
-	% Degenerate/no-contrast input: every sampled pixel pair had zero (or
-	% non-finite) measured contrast loss, so there is no eigenvector to
-	% extract. This case is not covered by an equation in the paper, but
-	% Section 4.1 discusses the same underlying situation (Figure 7,
-	% "Pink Head"): "Note that deuteranopes (and protanopes) already
-	% perceive the reference image as having sufficient contrast, and no
-	% recoloring is necessary." We extrapolate that guidance here: leave
-	% the image unrecolored (cd1 has no meaningful direction) rather than
-	% projecting onto an arbitrary fallback axis.
-	cd1 = [0,0];
+	% No estimable chromatic-loss direction: none of the sampled pairs
+	% produced a non-zero weighted a*b* difference. This occurs when all
+	% sampled pairs are identical, differ only in lightness, or have zero
+	% measured contrast loss whenever their chromatic difference is non-zero.
+	% Leave the image unrecolored rather than selecting an arbitrary axis.
+	cd1 = [];
 else
 	[V,D] = eig(A);
 	[~,idv] = max(abs(diag(D)));
 	cd1 = V(:,idv).';
-	cd1 = cd1 ./ max(eps,norm(cd1));
+	cd1 = cd1 ./ norm(cd1);
 	%
 	if ~isempty(tcd) && all(isfinite(tcd)) && any(tcd)
 		tcd = tcd ./ max(eps,norm(tcd));
@@ -359,7 +372,7 @@ xyzr = idx.*tmp + ~idx.*(116*fxyz-16)/kappa;
 idl  = Lab(:,1)>(kappa*epsilon);
 xyzr(~idl,2) = Lab(~idl,1)/kappa;
 XYZ = bsxfun(@times,xyzr,wpt);
-%% YXZ2RGB
+%% XYZ2RGB
 M = [... IEC 61966-2-1:1999 (for compatibility)
 	0.4124,0.3576,0.1805;...
 	0.2126,0.7152,0.0722;...

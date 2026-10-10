@@ -106,6 +106,9 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 % * Empty k-means clusters are silently removed. This avoids arbitrary
 %   reseeding rules and keeps the effective set of segment centers equal
 %   to the non-empty image segments.
+% * If the stable-angle solver reaches its maximum iteration count without
+%   satisfying <tol>, the final bounded iterate is used and a warning is
+%   issued. Increase <nit> or relax <tol> if required.
 % * This implementation leaves the random number generator untouched:
 %   users who require reproducible segmentation should set and restore
 %   RNG state outside this function using whatever seed-control API is
@@ -114,7 +117,8 @@ function [rec,raw,ctr0,ctr1,idx,opts] = milic2015(rgb,typ,opts,varargin)
 %% Input Arguments %%
 %
 %   rgb = NumericArray of sRGB values to convert, size RxCx3. Floating
-%         point values must be 0<=rgb<=1, integer values must be >=0.
+%         point values must be 0<=rgb<=1, whereas integer values must be
+%         in the range 0<=rgb<=intmax(class(rgb)).
 %         Dimensions 1 and 2 are interpreted as rows and columns
 %         respectively, dimension 3 encodes the R,G,B values.
 %   typ = CharRowVector or StringScalar, the type of dichromacy to correct for:
@@ -220,7 +224,7 @@ assert(stpo.ang<=90,...
 	'SC:milic2015:options:ang:TooLarge',...
 	'The angular half-width <ang> must not exceed 90 degrees.')
 %
-%% Convert to CIE L*u''v'' and Segment by Chromaticity %%
+%% Convert to CIE L*u'v' and Segment by Chromaticity %%
 %
 luv = sRGB2Lupvp(reshape(rgb,[],3),stpo.wpt);
 uv0 = luv(:,2:3);
@@ -338,9 +342,11 @@ for it = 1:nit
 		p(k) = min(bb(k),max(aa(k),0.5*(p(k-1)+p(k+1))));
 	end
 	if max(abs(p-old))<=tol
-		break
+		return
 	end
 end
+warning('SC:milic2015:StableAngles:NoConvergence',...
+	'Stable-angle iteration did not converge to the requested tolerance.')
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%mStableAngles
 function idx = mKMeans(dat,k,kmi,kmr)
@@ -369,7 +375,7 @@ for r = 1:kmr
 				ctr(j,:) = mean(dat(idj,:),1);
 			end
 		end
-		if isequal(tmp,old) || max(abs(ctr(:)-oldctr(:)))<=eps
+		if isequal(tmp,old) || max(abs(ctr(:)-oldctr(:)))<=1e-6
 			break
 		end
 	end
@@ -431,19 +437,15 @@ Y(idl) = wpt(2) * L(idl) / kappa;
 %
 % Inverting u'=4X/(X+15Y+3Z), v'=9Y/(X+15Y+3Z) gives:
 % X = Y*9*u'/(4*v'), Z = Y*(12-3*u'-20*v')/(4*v').
-% The denominator guard is purely defensive: valid sRGB-derived colors have
-% positive v', but remapping and raw intermediate values are intentionally
-% allowed to leave the display gamut before final clipping.
+% The inverse conversion is singular at v'==0. Valid sRGB-derived colors
+% have positive v', although remapping may produce out-of-gamut or
+% negative intermediate chromaticities.
+% Values effectively at the singularity are mapped to zero XYZ.
 den = 4*vp;
-den(abs(den)<eps) = eps;
 X = Y .* 9 .* up ./ den;
 Z = Y .* (12 - 3*up - 20*vp) ./ den;
-%
-idz = L<=0;
-X(idz) = 0;
-Y(idz) = 0;
-Z(idz) = 0;
 XYZ = [X,Y,Z];
+XYZ(abs(den)<eps,:) = 0;
 %% XYZ2RGB
 M = [... IEC 61966-2-1:1999 (for compatibility)
 	0.4124,0.3576,0.1805;...

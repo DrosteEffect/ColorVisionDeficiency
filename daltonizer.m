@@ -35,7 +35,7 @@ function [dal,raw,cvd] = daltonizer(rgb,typ,sev)
 %
 % The error-redistribution matrix is type-specific: many public
 % implementations reuse the protanopia matrix for all three types,
-% which Simon-Liedtke and Farup explains is incorrect.
+% which Simon-Liedtke and Farup explain is incorrect.
 %
 % References:
 %  Fidaner O, Lin P, Ozguven N: "Analysis of Color Blindness", 2005.

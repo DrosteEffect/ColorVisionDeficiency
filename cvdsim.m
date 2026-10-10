@@ -132,7 +132,7 @@ switch lower(typ)
 end
 %
 if nargin<3
-	sev = 10;
+	s10 = 10;
 else
 	assert(isnumeric(sev)&&isscalar(sev)&&isreal(sev),...
 		'SC:cvdsim:sev:NotUnitScalar',...
@@ -140,7 +140,7 @@ else
 	assert(sev>=0&&sev<=1,...
 		'SC:cvdsim:sev:OutOfRange',...
 		'Third input <sev> must have a value between 0 and 1 (inclusive).')
-	sev = 10*double(sev);
+	s10 = 10*double(sev);
 end
 %
 if nargin<4
@@ -154,8 +154,8 @@ end
 %
 %% Interpolate the Simulation Matrix %%
 %
-id0 = min(floor(sev),9);
-adj = sev-id0;
+id0 = min(floor(s10),9);
+adj = s10-id0;
 mat = (1-adj).*arr(:,:,id0+1) + adj.*arr(:,:,id0+2);
 %
 %% Apply the Transformation %%
